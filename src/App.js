@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
-function App() {
+const App = () => {
+  const [counter, setCounter] = useState(0);
+
+  // Fetch the current counter value when the component mounts
+  useEffect(() => {
+    fetch('http://localhost:4000/counter')
+      .then(response => response.json())
+      .then(data => setCounter(data.counter))
+      .catch(error => console.error('Error fetching counter:', error));
+  }, []);
+
+  // Function to handle incrementing the counter
+  const incrementCounter = () => {
+    fetch('http://localhost:4000/increment', {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => setCounter(data.counter))
+      .catch(error => console.error('Error incrementing counter:', error));
+  };
+
+  // Function to handle decrementing the counter
+  const decrementCounter = () => {
+    fetch('http://localhost:4000/decrement', {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => setCounter(data.counter))
+      .catch(error => console.error('Error decrementing counter:', error));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Counter: {counter}</h1>
+      <button onClick={incrementCounter}>Increment</button>
+      <button onClick={decrementCounter} style={{ marginLeft: '10px' }}>
+        Decrement
+      </button>
     </div>
   );
-}
+};
 
 export default App;
